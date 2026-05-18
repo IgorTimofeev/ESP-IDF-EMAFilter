@@ -23,7 +23,11 @@ namespace YOBA {
 			}
 
 			static float apply(const uint16_t oldValue, const uint16_t newValue, const uint16_t factor) {
-				return oldValue * (0xFFFF - factor) / 0xFFFF + newValue * factor / 0xFFFF;
+				return oldValue * (std::numeric_limits<uint16_t>::max() - factor) / std::numeric_limits<uint16_t>::max() + newValue * factor / std::numeric_limits<uint16_t>::max();
+			}
+
+			static float apply(const uint32_t oldValue, const uint32_t newValue, const uint32_t factor) {
+				return oldValue * (std::numeric_limits<uint32_t>::max() - factor) / std::numeric_limits<uint32_t>::max() + newValue * factor / std::numeric_limits<uint32_t>::max();
 			}
 			
 			static float applyToAngle(float oldValue, const float newValue, const float factor) {
