@@ -20,14 +20,15 @@ namespace YOBA {
 				return oldValue * (1.f - factor) + newValue * factor;
 			}
 
-			static float apply(const uint16_t oldValue, const uint16_t newValue, const uint16_t factor) {
-				return oldValue * (std::numeric_limits<uint16_t>::max() - factor) / std::numeric_limits<uint16_t>::max() + newValue * factor / std::numeric_limits<uint16_t>::max();
+			static float apply(const uint32_t oldValue, const uint32_t newValue, uint16_t factor) {
+				constexpr static uint16_t factorMax = 1'000;
+
+				if (factor > factorMax)
+					factor = factorMax;
+
+				return (oldValue * (factorMax - factor) + newValue * factor) / factorMax;
 			}
 
-			static float apply(const uint32_t oldValue, const uint32_t newValue, const uint32_t factor) {
-				return oldValue * (std::numeric_limits<uint32_t>::max() - factor) / std::numeric_limits<uint32_t>::max() + newValue * factor / std::numeric_limits<uint32_t>::max();
-			}
-			
 			static float applyToAngle(float oldValue, const float newValue, const float factor) {
 				auto delta = newValue - oldValue;
 				
