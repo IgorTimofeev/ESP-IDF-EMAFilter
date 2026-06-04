@@ -1,11 +1,12 @@
 #pragma once
 
+#include <cstdint>
 #include <cmath>
 #include <numbers>
 #include <algorithm>
 
 namespace YOBA {
-	class LowPassFilter {
+	class EMAFilter {
 		public:
 			static float getDeltaTimeSFactor(const float factorPerSecond, const float deltaTimeS) {
 				return factorPerSecond * deltaTimeS;
@@ -15,10 +16,7 @@ namespace YOBA {
 				return factorPerSecond * static_cast<float>(deltaTimeUs) / 1'000'000.f;
 			}
 
-			static float apply(const float oldValue, const float newValue, float factor) {
-				// Just in case
-				factor = std::clamp(factor, 0.f, 1.f);
-				
+			static float apply(const float oldValue, const float newValue, const float factor) {
 				return oldValue * (1.f - factor) + newValue * factor;
 			}
 
