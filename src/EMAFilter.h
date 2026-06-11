@@ -4,10 +4,13 @@
 #include <cmath>
 #include <numbers>
 #include <algorithm>
+#include <limits>
 
 namespace YOBA {
 	class EMAFilter {
 		public:
+			constexpr static uint16_t maxUint16Factor = std::numeric_limits<uint16_t>::max();
+
 			static float getDeltaTimeSFactor(const float factorPerSecond, const float deltaTimeS) {
 				return factorPerSecond * deltaTimeS;
 			}
@@ -20,13 +23,8 @@ namespace YOBA {
 				return oldValue * (1.f - factor) + newValue * factor;
 			}
 
-			static float apply(const uint32_t oldValue, const uint32_t newValue, uint16_t factor) {
-				constexpr static uint16_t factorMax = 1'000;
-
-				if (factor > factorMax)
-					factor = factorMax;
-
-				return (oldValue * (factorMax - factor) + newValue * factor) / factorMax;
+			static float apply(const uint32_t oldValue, const uint32_t newValue, const uint16_t factor) {
+				return (oldValue * (maxUint16Factor - factor) + newValue * factor) / maxUint16Factor;
 			}
 
 			static float applyToAngle(float oldValue, const float newValue, const float factor) {
